@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Redirecting...</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H68D88LHFJ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-H68D88LHFJ');
+  </script>
+
+  <script>
+    // Get the current path
+    const path = window.location.pathname;
+
+    // Define redirects
+    const redirects = {
+      '/guidetoeurope': 'https://guidetoeurope.com/',
+      '/guidetoiceland': 'https://guidetoiceland.is/',
+      '/guidetoiceland-instagram': 'https://www.instagram.com/guidetoiceland/',
+      '/guidetoiceland-facebook': 'https://www.facebook.com/guidetoiceland.is/',
+    };
+
+    // Perform redirect if match found
+    if (redirects[path]) {
+      setTimeout(() => {
+        window.location.href = redirects[path];
+      }, 100);
+    } else {
+      document.write('<p>Invalid link. Please check the URL.</p>');
+    }
+  </script>
+</head>
+<body>
+  <p>Redirecting you...</p>
+</body>
+</html>
