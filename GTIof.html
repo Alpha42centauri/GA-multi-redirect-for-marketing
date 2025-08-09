@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Redirecting...</title>
-
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-H68D88LHFJ"></script>
   <script>
@@ -12,12 +11,87 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-H68D88LHFJ');
+    
+    // Track custom event for redirect
+    gtag('event', 'reddit_redirect', {
+      'event_category': 'engagement',
+      'event_label': 'guide_to_iceland_redirect',
+      'transport_type': 'beacon'
+    });
   </script>
-
-  <!-- Redirect after 1 second -->
-  <meta http-equiv="refresh" content="1; url=https://guidetoiceland.is/">
+  
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background-color: #f5f5f5;
+    }
+    .container {
+      text-align: center;
+      padding: 20px;
+    }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 4px solid #3498db;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
-  <p>Redirecting you to Guide to Iceland...</p>
+  <div class="container">
+    <div class="spinner"></div>
+    <p>Redirecting you to Guide to Iceland...</p>
+  </div>
+
+  <script>
+    // Function to perform redirect
+    function performRedirect() {
+      window.location.href = 'https://guidetoiceland.is/';
+    }
+    
+    // Wait for GA to load, then redirect
+    // Try multiple approaches for better reliability
+    let redirected = false;
+    
+    // Method 1: Wait for gtag to be available
+    function waitForGA() {
+      if (typeof gtag !== 'undefined' && !redirected) {
+        redirected = true;
+        // Send event with callback
+        gtag('event', 'page_view', {
+          'event_callback': function() {
+            setTimeout(performRedirect, 100);
+          }
+        });
+        // Fallback timeout in case callback doesn't fire
+        setTimeout(performRedirect, 1500);
+      } else if (!redirected) {
+        setTimeout(waitForGA, 100);
+      }
+    }
+    
+    // Method 2: Fallback timeout
+    setTimeout(function() {
+      if (!redirected) {
+        redirected = true;
+        performRedirect();
+      }
+    }, 3000);
+    
+    // Start waiting for GA
+    waitForGA();
+  </script>
 </body>
 </html>
