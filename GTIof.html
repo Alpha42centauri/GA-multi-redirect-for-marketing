@@ -61,6 +61,17 @@
       window.location.href = 'https://guidetoiceland.is/';
     }
     
+    // Debug logging (REMOVE AFTER TESTING)
+    console.log('Page loaded, checking GA4...');
+    
+    window.addEventListener('load', function() {
+      console.log('Window loaded');
+      setTimeout(function() {
+        console.log('gtag available?', typeof gtag);
+        console.log('dataLayer:', window.dataLayer);
+      }, 2000);
+    });
+    
     // Wait for GA to load, then redirect
     // Try multiple approaches for better reliability
     let redirected = false;
