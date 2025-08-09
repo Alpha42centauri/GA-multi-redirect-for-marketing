@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,67 +61,34 @@
       window.location.href = 'https://guidetoiceland.is/';
     }
     
-    // Debug logging (REMOVE AFTER TESTING)
-    console.log('Page loaded, checking GA4...');
-    
-    window.addEventListener('load', function() {
-      console.log('Window loaded');
-      setTimeout(function() {
-        console.log('gtag available?', typeof gtag);
-        console.log('dataLayer:', window.dataLayer);
-      }, 2000);
-    });
-    
-    // TESTING MODE - REDIRECT DISABLED
-    // Remove this section after testing to re-enable redirect
-    
+    // Wait for GA to load, then redirect
+    // Try multiple approaches for better reliability
     let redirected = false;
-    let testingMode = true; // SET TO FALSE TO ENABLE REDIRECT
     
     // Method 1: Wait for gtag to be available
     function waitForGA() {
       if (typeof gtag !== 'undefined' && !redirected) {
-        console.log('✅ GA4 loaded successfully!');
-        
-        // Send the tracking events
+        redirected = true;
+        // Send event with callback
         gtag('event', 'page_view', {
           'event_callback': function() {
-            console.log('✅ Page view event sent');
+            setTimeout(performRedirect, 100);
           }
         });
-        
-        gtag('event', 'reddit_redirect', {
-          'event_category': 'engagement',
-          'event_label': 'guide_to_iceland_redirect',
-          'transport_type': 'beacon'
-        });
-        console.log('✅ Custom reddit_redirect event sent');
-        
-        if (!testingMode) {
-          redirected = true;
-          setTimeout(performRedirect, 100);
-        } else {
-          console.log('🧪 TESTING MODE: Redirect disabled for debugging');
-          document.querySelector('.container').innerHTML += 
-            '<p style="color: green; margin-top: 20px;"><strong>✅ Tracking working!</strong><br>Check GA4 real-time reports<br><em>Testing mode - redirect disabled</em></p>';
-        }
+        // Fallback timeout in case callback doesn't fire
+        setTimeout(performRedirect, 1500);
       } else if (!redirected) {
-        console.log('⏳ Waiting for GA4 to load...');
         setTimeout(waitForGA, 100);
       }
     }
     
-    // Method 2: Fallback timeout  
+    // Method 2: Fallback timeout
     setTimeout(function() {
-      if (!redirected && !testingMode) {
+      if (!redirected) {
         redirected = true;
         performRedirect();
-      } else if (typeof gtag === 'undefined') {
-        console.log('❌ GA4 failed to load after 5 seconds');
-        document.querySelector('.container').innerHTML += 
-          '<p style="color: red; margin-top: 20px;"><strong>❌ GA4 not loading</strong><br>Check for ad blockers</p>';
       }
-    }, 5000);
+    }, 3000);
     
     // Start waiting for GA
     waitForGA();
