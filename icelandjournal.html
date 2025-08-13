@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Redirecting to Iceland Journal...</title>
+  
+  <!-- Google Analytics (Your existing setup) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H68D88LHFJ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-H68D88LHFJ', {
+      // Disable automatic page view - we only want our custom event
+      'send_page_view': false
+    });
+    
+    // Don't send event here - we'll send it in the JavaScript function below
+  </script>
+  
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #c2e9fb 0%, #a1c4fd 100%);
+      color: #333;
+    }
+    .container {
+      text-align: center;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+    }
+    .logo {
+      font-size: 2.5em;
+      font-weight: bold;
+      margin-bottom: 20px;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 3px solid #667eea;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 30px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .message {
+      font-size: 1.2em;
+      margin-bottom: 15px;
+      color: #555;
+    }
+    .submessage {
+      font-size: 0.9em;
+      color: #777;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">Iceland Journal</div>
+    <div class="spinner"></div>
+    <div class="message">Taking you to the travel journal...</div>
+    <div class="submessage">Adventures and memories from Iceland</div>
+  </div>
+
+  <script>
+    const redirectUrl = 'https://grand-brie-f69.notion.site/Journal-for-Iceland-240a4e8f9d9f80f1869ffcf2492c9e3f';
+    
+    // Function to perform redirect
+    function performRedirect() {
+      window.location.href = redirectUrl;
+    }
+    
+    // Track the redirect with GA4
+    let redirected = false;
+    let attempts = 0;
+    const maxAttempts = 30; // 3 seconds max wait
+    
+    function waitForGA4() {
+      attempts++;
+      
+      if (typeof gtag !== 'undefined' && !redirected) {
+        redirected = true;
+        
+        // Send the Notion page specific tracking event
+        gtag('event', 'notion_page_visits', {
+          'event_category': 'content_navigation',
+          'event_label': 'iceland_journal_redirect', 
+          'source': 'redirect_page',
+          'destination': 'notion_journal',
+          'page_type': 'iceland_travel_journal',
+          'value': 1,
+          'transport_type': 'beacon',
+          'event_callback': function() {
+            // Redirect after confirming event sent
+            setTimeout(performRedirect, 100);
+          }
+        });
+        
+        // Fallback redirect in case callback doesn't fire
+        setTimeout(performRedirect, 2000);
+        
+      } else if (attempts < maxAttempts && !redirected) {
+        setTimeout(waitForGA4, 100);
+        
+      } else if (!redirected) {
+        redirected = true;
+        // Redirect anyway as fallback
+        setTimeout(performRedirect, 200);
+      }
+    }
+    
+    // Begin waiting for GA4
+    setTimeout(waitForGA4, 300);
+    
+    // Ultimate fallback
+    setTimeout(function() {
+      if (!redirected) {
+        redirected = true;
+        performRedirect();
+      }
+    }, 6000);
+  </script>
+</body>
+</html>
