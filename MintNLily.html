@@ -16,16 +16,7 @@
       'send_page_view': false
     });
     
-    // Send custom tracking event specifically for Mint & Lily
-    gtag('event', 'mint_lily_click', {
-      'event_category': 'reddit_traffic', 
-      'event_label': 'mint_lily_jewelry_redirect',
-      'source': 'reddit',
-      'destination': 'mint_and_lily',
-      'brand': 'mintandlily',
-      'value': 1,
-      'timestamp': new Date().toISOString()
-    });
+    // Don't send event here - we'll send it in the JavaScript function below
   </script>
   
   <style>
